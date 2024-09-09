@@ -271,3 +271,13 @@ function sortyear(){
 function nagivetodetail(id){
     window.location.href = `page/content_zoom.html?id=${id}`;
 }
+
+
+
+let button = document.getElementById('searchcontent'); 
+
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter' || event.keyCode === 13) {
+        search();
+    }
+});
