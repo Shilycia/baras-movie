@@ -23,7 +23,7 @@ function getdata(bass = BASEURL) {
             const response = await fetch(BASEURL);
             if (response.status === 200) {
                 const data = await response.json();
-                return data.results; 
+                return data; 
             } else {
                 throw new Error("Server Error");
             }
@@ -60,23 +60,69 @@ function getdata(bass = BASEURL) {
             let search = document.getElementById('searchcontent').value; 
             let info = document.getElementById('result');
             let containerpagination = document.getElementById('conatiner-link')
-            
+
             document.getElementById('film-container').innerHTML = '';
 
-            films.forEach(film => {
+            films.results.forEach(film => {
                 const filmCard = createFilmCard(film); 
                 document.getElementById('film-container').insertAdjacentHTML("beforeend", filmCard);
             });
             
             if (search !== '') {
                 info.innerHTML = '';
-                info.insertAdjacentHTML("beforeend", `${films.length} hasil pencarian untuk "${search}"`);
+                info.insertAdjacentHTML("beforeend", `${films.total_results} hasil pencarian untuk "${search}"`);
             } else {
                 info.innerHTML = ''; 
             }
+            console.log(films)
+
+            const limit = 5; 
+            let limitPage = limit + page - 1;
+            let limitPrev = page - 2; 
+            
+            if (limitPrev < 1) {
+                limitPrev = 1;
+            }
+            let totalPage 
+            films.total_pages > 500 ? totalPage = 500 : totalpage = films.total_pages;
+            
+            
+            
+            if (page > 1) {
+                for (let i = limitPrev; i < page; i++) {
+                    containerpagination.insertAdjacentHTML("beforeend", 
+                        `<li class="page-item page-link" onclick="linkpage(${i})">${i}</li>`
+                    );
+                }
+            }
+            
+            for (let i = page; i <= limitPage && i <= totalPage; i++) {
+                containerpagination.insertAdjacentHTML("beforeend", 
+                    `<li class="page-item page-link ${i === page ? 'active' : ''}" onclick="linkpage(${i})">${i}</li>`
+                );
+            }
+            
+            if (totalPage > limitPage) {
+                containerpagination.insertAdjacentHTML("beforeend", 
+                    `<li class="page-item page-link">...</li>`
+                );
+                containerpagination.insertAdjacentHTML("beforeend", 
+                    `<li class="page-item page-link" onclick="linkpage(${totalPage})">${totalPage}</li>`
+                );
+            }
+            
+        
         }
     
     return loadPage();
+}
+
+
+function linkpage(pagecount){
+    page = pagecount
+    getdata()
+    let containerpagination = document.getElementById('conatiner-link')
+    containerpagination.innerHTML = ""
 }
 
 // buat manggil function pas load data 
@@ -97,6 +143,9 @@ prev.addEventListener('click',function(){
     </div>`
     container_prev.style.display = 'none'
     setTimeout(() => {
+        
+        let containerpagination = document.getElementById('conatiner-link')
+        containerpagination.innerHTML = ""
         div.innerHTML = ''
         getdata()
       container_prev.style.display = "block"
@@ -116,6 +165,8 @@ next.addEventListener('click',function(){
     setTimeout(() => {
         div.innerHTML = ''
         getdata()
+        let containerpagination = document.getElementById('conatiner-link')
+        containerpagination.innerHTML = ""
         container_prev.style.display = 'block'
     }, 500);
 })
@@ -150,43 +201,50 @@ function getLastUpdate(dateString) {
     }
 }
 
-// function search buat nyari film
-function search(){
-    // manggil input yang udah di masukin
+  
+// Function to handle search and API request
+function search() {
     let search = document.getElementById('searchcontent').value
     // kalo kosong isinya bakal ngereturn yang biasa linknya
+    page = 1
     if(search === ""){
         div.innerHTML = ''
-        page = 1
         BASEURL = `discover/movie?api_key=dd0b318e97369a434228f9f3295faa40&page=${page}`;
+        let containerpagination = document.getElementById('conatiner-link')
+        containerpagination.innerHTML = ""
         getdata();
+        
     }else{
         // kalo ada isinya di cari trus di kirim endpointnya ke get data trus dari get data bakal di tampilin
-        page = 1
-        BASEURL = `search/movie?api_key=dd0b318e97369a434228f9f3295faa40&query=${search}`
+        BASEURL = `search/movie?api_key=dd0b318e97369a434228f9f3295faa40&query=${search}`;
+        let containerpagination = document.getElementById('conatiner-link')
+        containerpagination.innerHTML = ""
         div.innerHTML=''
         getdata()
     }
 
 }
-
+  
 // fungsi debounce
 const input = document.getElementById('searchcontent')
 let timeoutid;
 
 input.addEventListener('input', e =>{
+    page = 1
     clearTimeout(timeoutid)
     timeoutid = setTimeout(()=>{
         const data = e.target.value;
-        page = 1
         BASEURL = `search/movie?api_key=dd0b318e97369a434228f9f3295faa40&query=${data}`;
         if(data === ""){
             div.innerHTML = ''
-            page = 1
             BASEURL = `discover/movie?api_key=dd0b318e97369a434228f9f3295faa40&page=${page}`;
+            let containerpagination = document.getElementById('conatiner-link')
+            containerpagination.innerHTML = ""
             getdata();
         }
         div.innerHTML=''
+        let containerpagination = document.getElementById('conatiner-link')
+        containerpagination.innerHTML = ""
         getdata()
     },1000)
 })
@@ -230,6 +288,8 @@ function filterlang(){
     let valuegenre = document.getElementById('lang_select').value;
     BASEURL = `discover/movie?api_key=dd0b318e97369a434228f9f3295faa40&with_original_language=${valuegenre}`;
     div.innerHTML = '';
+    let containerpagination = document.getElementById('conatiner-link')
+    containerpagination.innerHTML = ""
     getdata()
 }
 
@@ -240,6 +300,8 @@ function filtergenre(){
     let valuegenre = document.getElementById('genre_select').value;
     BASEURL = `discover/movie?api_key=dd0b318e97369a434228f9f3295faa40&with_genres=${valuegenre}`;
     div.innerHTML = '';
+    let containerpagination = document.getElementById('conatiner-link')
+    containerpagination.innerHTML = ""
     getdata()
 
 }
@@ -247,8 +309,11 @@ function filtergenre(){
 // eksekusi kalo sort lewat rate
 function sortrate(){
     document.getElementById('searchcontent').value=''; 
-    let valuegenre = document.getElementById('rate_sort').value;
     page = 1
+    let valuegenre = document.getElementById('rate_sort').value;
+    let containerpagination = document.getElementById('conatiner-link')
+    containerpagination.innerHTML = ""
+
     if(valuegenre === "to_high"){
         BASEURL = `discover/movie?api_key=dd0b318e97369a434228f9f3295faa40&page=1&sort_by=vote_average.asc`;
         div.innerHTML = '';
@@ -268,8 +333,11 @@ function sortrate(){
 // eksekusi kalo sort lewat abjad
 function sortabjad(){
     document.getElementById('searchcontent').value=''; 
-    let valuegenre = document.getElementById('rate_abjad').value;
     page = 1
+    let valuegenre = document.getElementById('rate_abjad').value;
+    let containerpagination = document.getElementById('conatiner-link')
+    containerpagination.innerHTML = ""
+
     if(valuegenre === "to_high"){
         BASEURL = `discover/movie?api_key=dd0b318e97369a434228f9f3295faa40&page=1&sort_by=original_title.asc`;
         div.innerHTML = '';
@@ -289,8 +357,11 @@ function sortabjad(){
 // eksekusi kalo sort lewat tahun
 function sortyear(){
     document.getElementById('searchcontent').value=''; 
-    let valuegenre = document.getElementById('rate_year').value;
     page = 1
+    let valuegenre = document.getElementById('rate_year').value;
+    let containerpagination = document.getElementById('conatiner-link')
+    containerpagination.innerHTML = ""
+
     if(valuegenre === "to_high"){
         BASEURL = `discover/movie?api_key=dd0b318e97369a434228f9f3295faa40&page=1&sort_by=primary_release_date.asc`;
         div.innerHTML = '';
@@ -310,6 +381,8 @@ function sortyear(){
 function nagivetodetail(id){
     window.location.href = `content_zoom.html?id=${id}`;
 }
+
+
 
 let button = document.getElementById('searchcontent'); 
 

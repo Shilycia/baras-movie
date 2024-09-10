@@ -70,7 +70,7 @@ function getdata(bass = BASEURL) {
             
             if (search !== '') {
                 info.innerHTML = '';
-                info.insertAdjacentHTML("beforeend", `${films.length} hasil pencarian untuk "${search}"`);
+                info.insertAdjacentHTML("beforeend", `${films.total_results} hasil pencarian untuk "${search}"`);
             } else {
                 info.innerHTML = ''; 
             }
@@ -84,7 +84,8 @@ function getdata(bass = BASEURL) {
                 limitPrev = 1;
             }
             let totalPage 
-            films.total_pages > 500 ? totalPage = 500 : totalpage = films.total_pages; 
+            films.total_pages > 500 ? totalPage = 500 : totalpage = films.total_pages;
+            
             
             
             if (page > 1) {
@@ -115,6 +116,7 @@ function getdata(bass = BASEURL) {
     
     return loadPage();
 }
+
 
 function linkpage(pagecount){
     page = pagecount
