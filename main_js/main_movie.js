@@ -148,13 +148,15 @@ function search(){
     // kalo kosong isinya bakal ngereturn yang biasa linknya
     if(search === ""){
         div.innerHTML = ''
-        const baseUrl = `discover/movie?api_key=dd0b318e97369a434228f9f3295faa40&page=${page}`;
-        getdata(baseUrl);
+        page = 1
+        BASEURL = `discover/movie?api_key=dd0b318e97369a434228f9f3295faa40&page=${page}`;
+        getdata();
     }else{
         // kalo ada isinya di cari trus di kirim endpointnya ke get data trus dari get data bakal di tampilin
-        const link = `search/movie?api_key=dd0b318e97369a434228f9f3295faa40&query=${search}`
+        page = 1
+        BASEURL = `search/movie?api_key=dd0b318e97369a434228f9f3295faa40&query=${search}`
         div.innerHTML=''
-        getdata(link)
+        getdata()
     }
 
 }
@@ -167,14 +169,16 @@ input.addEventListener('input', e =>{
     clearTimeout(timeoutid)
     timeoutid = setTimeout(()=>{
         const data = e.target.value;
-        const link = `search/movie?api_key=dd0b318e97369a434228f9f3295faa40&query=${data}`;
+        page = 1
+        BASEURL = `search/movie?api_key=dd0b318e97369a434228f9f3295faa40&query=${data}`;
         if(data === ""){
             div.innerHTML = ''
-            const baseUrl = `discover/movie?api_key=dd0b318e97369a434228f9f3295faa40&page=${page}`;
-            getdata(baseUrl);
+            page = 1
+            BASEURL = `discover/movie?api_key=dd0b318e97369a434228f9f3295faa40&page=${page}`;
+            getdata();
         }
         div.innerHTML=''
-        getdata(link)
+        getdata()
     },1000)
 })
 
@@ -212,37 +216,39 @@ function language(){
 
 // buat eksekusi kalo ngefilter lewat bahasa
 function filterlang(){
+    page = 1
     let valuegenre = document.getElementById('lang_select').value;
-    const link = `discover/movie?api_key=dd0b318e97369a434228f9f3295faa40&with_original_language=${valuegenre}`;
+    BASEURL = `discover/movie?api_key=dd0b318e97369a434228f9f3295faa40&with_original_language=${valuegenre}`;
     div.innerHTML = '';
-    getdata(link)
+    getdata()
 }
 
 // buat eksekusi kalo ngefilter lewat genre
 function filtergenre(){
+    page = 1
     let valuegenre = document.getElementById('genre_select').value;
-    const link = `discover/movie?api_key=dd0b318e97369a434228f9f3295faa40&with_genres=${valuegenre}`;
+    BASEURL = `discover/movie?api_key=dd0b318e97369a434228f9f3295faa40&with_genres=${valuegenre}`;
     div.innerHTML = '';
-    getdata(link)
+    getdata()
 
 }
 
 // eksekusi kalo sort lewat rate
 function sortrate(){
     let valuegenre = document.getElementById('rate_sort').value;
-
+    page = 1
     if(valuegenre === "to_high"){
-        const link = `discover/movie?api_key=dd0b318e97369a434228f9f3295faa40&page=1&sort_by=vote_average.asc`;
+        BASEURL = `discover/movie?api_key=dd0b318e97369a434228f9f3295faa40&page=1&sort_by=vote_average.asc`;
         div.innerHTML = '';
-        getdata(link)
+        getdata()
     }else if(valuegenre === "to_low"){
-        const link = `discover/movie?api_key=dd0b318e97369a434228f9f3295faa40&page=1&sort_by=vote_average.desc`;
+        BASEURL = `discover/movie?api_key=dd0b318e97369a434228f9f3295faa40&page=1&sort_by=vote_average.desc`;
         div.innerHTML = '';
-        getdata(link)
+        getdata()
     }else{
-        const link = `discover/movie?api_key=dd0b318e97369a434228f9f3295faa40&page=${page}`
+        BASEURL = `discover/movie?api_key=dd0b318e97369a434228f9f3295faa40&page=${page}`
         div.innerHTML=''
-        getdata(link)
+        getdata()
     }
 
 }
@@ -250,19 +256,19 @@ function sortrate(){
 // eksekusi kalo sort lewat abjad
 function sortabjad(){
     let valuegenre = document.getElementById('rate_abjad').value;
-
+    page = 1
     if(valuegenre === "to_high"){
-        const link = `discover/movie?api_key=dd0b318e97369a434228f9f3295faa40&page=1&sort_by=original_title.asc`;
+        BASEURL = `discover/movie?api_key=dd0b318e97369a434228f9f3295faa40&page=1&sort_by=original_title.asc`;
         div.innerHTML = '';
-        getdata(link)
+        getdata()
     }else if(valuegenre === "to_low"){
-        const link = `discover/movie?api_key=dd0b318e97369a434228f9f3295faa40&page=1&sort_by=original_title.desc`;
+        BASEURL = `discover/movie?api_key=dd0b318e97369a434228f9f3295faa40&page=1&sort_by=original_title.desc`;
         div.innerHTML = '';
-        getdata(link)
+        getdata()
     }else{
-        const link = `discover/movie?api_key=dd0b318e97369a434228f9f3295faa40&page=${page}`
+        BASEURL = `discover/movie?api_key=dd0b318e97369a434228f9f3295faa40&page=${page}`
         div.innerHTML=''
-        getdata(link)
+        getdata()
     }
 
 }
@@ -270,19 +276,19 @@ function sortabjad(){
 // eksekusi kalo sort lewat tahun
 function sortyear(){
     let valuegenre = document.getElementById('rate_year').value;
-
+    page = 1
     if(valuegenre === "to_high"){
-        const link = `discover/movie?api_key=dd0b318e97369a434228f9f3295faa40&page=1&sort_by=primary_release_date.asc`;
+        BASEURL = `discover/movie?api_key=dd0b318e97369a434228f9f3295faa40&page=1&sort_by=primary_release_date.asc`;
         div.innerHTML = '';
-        getdata(link)
+        getdata()
     }else if(valuegenre === "to_low"){
-        const link = `discover/movie?api_key=dd0b318e97369a434228f9f3295faa40&page=1&sort_by=primary_release_date.desc`;
+        BASEURL = `discover/movie?api_key=dd0b318e97369a434228f9f3295faa40&page=1&sort_by=primary_release_date.desc`;
         div.innerHTML = '';
-        getdata(link)
+        getdata()
     }else{
-        const link = `discover/movie?api_key=dd0b318e97369a434228f9f3295faa40&page=${page}`
+        BASEURL = `discover/movie?api_key=dd0b318e97369a434228f9f3295faa40&page=${page}`
         div.innerHTML=''
-        getdata(link)
+        getdata()
     }
 
 }
