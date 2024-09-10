@@ -110,17 +110,43 @@ function getdata(bass = BASEURL) {
                     `<li class="page-item page-link" onclick="linkpage(${totalPage})">${totalPage}</li>`
                 );
             }
+
+            if(page > 3){
+                document.getElementById('back_to_1').style.display = "block"
+            }else{
+                document.getElementById('back_to_1').style.display = "none"
+            }
             
             let statuspage = "main_" + page
             
             document.getElementById(statuspage).style.background = "blue";
             document.getElementById(statuspage).style.color = "white";
+
+            if(page == 1){
+                document.getElementById('prev').style.display = "none"
+            }else{
+                document.getElementById('prev').style.display = "block"
+
+            }
+
+            if(page == totalPage){
+                document.getElementById('next').style.display = "none"
+            }else{
+                document.getElementById('next').style.display = "block"
+
+            }
         
         }
     
     return loadPage();
 }
 
+function backtoone(){
+    page = 1
+    let containerpagination = document.getElementById('conatiner-link')
+    containerpagination.innerHTML = ""
+    getdata()
+}
 
 function linkpage(pagecount){
     page = pagecount

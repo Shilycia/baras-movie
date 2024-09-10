@@ -163,6 +163,42 @@ async function loadMovies() {
     document.getElementById(statusPage).style.background = "blue";
     document.getElementById(statusPage).style.color = "white";
 
+    if(page > 3){
+        document.getElementById('back_to_1').style.display = "block"
+    }else{
+        document.getElementById('back_to_1').style.display = "none"
+    }
+
+    if(page == 1){
+        document.getElementById('prev').style.display = "none"
+    }else{
+        document.getElementById('prev').style.display = "block"
+
+    }
+
+    if(page == totalPage){
+        document.getElementById('next').style.display = "none"
+    }else{
+        document.getElementById('next').style.display = "block"
+
+    }
+
+    if(totalPage < 5){
+        document.getElementById('next').style.display = "none"
+        document.getElementById('prev').style.display = "none"
+        document.getElementById('back_to_1').style.display = "none"
+
+    }else{
+        document.getElementById('next').style.display = "block"
+    }
+
+}
+
+function backtoone(){
+    page = 1
+    let containerpagination = document.getElementById('conatiner-link')
+    containerpagination.innerHTML = ""
+    getdata()
 }
 
 function linkpage(pagecount){
