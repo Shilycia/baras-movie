@@ -79,7 +79,7 @@ async function fetchMoviesByGenre() {
         const response = await fetch(BASEURL);
         if (response.status === 200) {
             const data = await response.json();
-            return data.results;
+            return data;
         } else {
             throw new Error("Server Error");
         }
@@ -117,11 +117,60 @@ function createMovieCard(film) {
 async function loadMovies() {
     const films = await fetchMoviesByGenre();
 
-    div.innerHTML = ''; // Clear container before loading new movies
-    films.forEach(film => {
+    let containerPagination = document.getElementById('conatiner-link');
+    containerPagination.innerHTML = ''; 
+
+    films.results.forEach(film => {
         const filmCard = createMovieCard(film);
-        div.insertAdjacentHTML("beforeend", filmCard);
+        document.getElementById('film-container').insertAdjacentHTML("beforeend", filmCard);
     });
+
+    const limit = 5;
+    let limitPage = limit + page - 1;
+    let limitPrev = page - 2;
+
+    if (limitPrev < 1) {
+        limitPrev = 1;
+    }
+
+    let totalPage;
+    films.total_pages > 500 ? totalPage = 500 : totalPage = films.total_pages; 
+
+    if (page > 1) {
+        for (let i = limitPrev; i < page; i++) {
+            containerPagination.insertAdjacentHTML("beforeend", 
+                `<li class="page-item page-link" onclick="linkpage(${i})" id="main_${i}">${i}</li>`
+            );
+        }
+    }
+
+    for (let i = page; i <= limitPage && i <= totalPage; i++) {
+        containerPagination.insertAdjacentHTML("beforeend", 
+            `<li class="page-item page-link ${i === page ? 'active' : ''}" onclick="linkpage(${i})" id="main_${i}">${i}</li>`
+        );
+    }
+
+    if (totalPage > limitPage) {
+        containerPagination.insertAdjacentHTML("beforeend", 
+            `<li class="page-item page-link">...</li>`
+        );
+        containerPagination.insertAdjacentHTML("beforeend", 
+            `<li class="page-item page-link" onclick="linkpage(${totalPage})">${totalPage}</li>`
+        );
+    }
+
+    let statusPage = "main_" + page;
+    document.getElementById(statusPage).style.background = "blue";
+    document.getElementById(statusPage).style.color = "white";
+
+}
+
+function linkpage(pagecount){
+    page = pagecount
+    div.innerHTML = ""
+    loadMovies()
+    let containerpagination = document.getElementById('conatiner-link')
+    containerpagination.innerHTML = ""
 }
 
 // Initial load on page load
@@ -132,6 +181,8 @@ prev.addEventListener('click', function() {
     if (page > 1) {
         page--;
         handlePageLoad();
+    }else{
+        page = 1
     }
 });
 
@@ -178,3 +229,4 @@ function getLastUpdate(dateString) {
 function navigateToDetail(id) {
     window.location.href = `content_zoom.html?id=${id}`;
 }
+

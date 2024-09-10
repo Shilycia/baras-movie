@@ -91,14 +91,14 @@ function getdata(bass = BASEURL) {
             if (page > 1) {
                 for (let i = limitPrev; i < page; i++) {
                     containerpagination.insertAdjacentHTML("beforeend", 
-                        `<li class="page-item page-link" onclick="linkpage(${i})">${i}</li>`
+                        `<li class="page-item page-link" onclick="linkpage(${i})" id="main_${i}">${i}</li>`
                     );
                 }
             }
             
             for (let i = page; i <= limitPage && i <= totalPage; i++) {
                 containerpagination.insertAdjacentHTML("beforeend", 
-                    `<li class="page-item page-link ${i === page ? 'active' : ''}" onclick="linkpage(${i})">${i}</li>`
+                    `<li class="page-item page-link ${i === page ? 'active' : ''}" onclick="linkpage(${i})" id="main_${i}">${i}</li>`
                 );
             }
             
@@ -111,6 +111,10 @@ function getdata(bass = BASEURL) {
                 );
             }
             
+            let statuspage = "main_" + page
+            
+            document.getElementById(statuspage).style.background = "blue";
+            document.getElementById(statuspage).style.color = "white";
         
         }
     
