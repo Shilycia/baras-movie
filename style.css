@@ -129,6 +129,7 @@ select{
 .about{
     width: 60%;
     height: 80vh;
+    padding-right: 50px;
 }
 
 .poster-film img{

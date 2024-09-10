@@ -55,16 +55,24 @@ function getdata(bass = BASEURL) {
         
         async function loadPage() {
             
-            // manggil hasil return dari fect data tadi itu isinya json
             const films = await fetchData();
-            
-            // dilengkapi oleh perulangan biar tidak udah ketik kode ngulang
-            films.forEach(film => {
 
-                // ini manggil function yang buat tampilan nah parameternya di isi sama array foreach namanya film
-                const filmCard = createFilmCard(film);
+            let search = document.getElementById('searchcontent').value; 
+            let info = document.getElementById('result');
+            
+            document.getElementById('film-container').innerHTML = '';
+
+            films.forEach(film => {
+                const filmCard = createFilmCard(film); 
                 document.getElementById('film-container').insertAdjacentHTML("beforeend", filmCard);
             });
+            
+            if (search !== '') {
+                info.innerHTML = '';
+                info.insertAdjacentHTML("beforeend", `${films.length} hasil pencarian untuk "${search}"`);
+            } else {
+                info.innerHTML = ''; 
+            }
         }
     
     return loadPage();
@@ -214,6 +222,7 @@ function language(){
 
 // buat eksekusi kalo ngefilter lewat bahasa
 function filterlang(){
+    document.getElementById('searchcontent').value=''; 
     page = 1
     let valuegenre = document.getElementById('lang_select').value;
     BASEURL = `discover/movie?api_key=dd0b318e97369a434228f9f3295faa40&with_original_language=${valuegenre}`;
@@ -223,6 +232,7 @@ function filterlang(){
 
 // buat eksekusi kalo ngefilter lewat genre
 function filtergenre(){
+    document.getElementById('searchcontent').value=''; 
     page = 1
     let valuegenre = document.getElementById('genre_select').value;
     BASEURL = `discover/movie?api_key=dd0b318e97369a434228f9f3295faa40&with_genres=${valuegenre}`;
@@ -233,6 +243,7 @@ function filtergenre(){
 
 // eksekusi kalo sort lewat rate
 function sortrate(){
+    document.getElementById('searchcontent').value=''; 
     page = 1
     let valuegenre = document.getElementById('rate_sort').value;
 
@@ -254,6 +265,7 @@ function sortrate(){
 
 // eksekusi kalo sort lewat abjad
 function sortabjad(){
+    document.getElementById('searchcontent').value=''; 
     page = 1
     let valuegenre = document.getElementById('rate_abjad').value;
 
@@ -275,6 +287,7 @@ function sortabjad(){
 
 // eksekusi kalo sort lewat tahun
 function sortyear(){
+    document.getElementById('searchcontent').value=''; 
     page = 1
     let valuegenre = document.getElementById('rate_year').value;
 

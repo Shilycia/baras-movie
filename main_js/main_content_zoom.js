@@ -33,13 +33,14 @@ function createFilmCard(film) {
                     <img src="https://image.tmdb.org/t/p/original${film.poster_path}" alt="Poster">
                 </div>
                 <div class="about">
-                    <h2>${film.original_title}</h2>
-                    <p>${film.overview}</p>
-                    <div class="detail">
-                        <label>Rate: ${film.popularity}</label><br>
-                        <label>Genre: ${film.genres.map(genre => genre.name).join(', ')}</label><br>
-                        <label>Producer: ${film.production_companies.map(company => company.name).join(', ')}</label><br>
-                        <label>Release: ${film.release_date}</label>
+                    <h2 class="mt-5">${film.original_title}</h2>
+                    <p class="mt-3">${film.overview}</p>
+                    <div class="detail mt-5">
+                        <label class="mt-3 fw-bold">Vote : </label><label class="ms-1">${film.popularity}</label><br>
+                        <label class="mt-3 fw-bold">Genre : </label><label class="ms-1">${film.genres.map(genre => genre.name).join(', ')}</label><br>
+                        <label class="mt-3 fw-bold">Producer : </label><br><label>${film.production_companies.map(company => company.name).join(', ')}</label><br>
+                        <label class="mt-3 fw-bold">Release : </label><label class="ms-1">${film.release_date}</label><br>
+                        <label class="mt-3 fw-bold">Rate : </label><label class="ms-1">${film.vote_average}</label>
                     </div>
                 </div>
             </div>
