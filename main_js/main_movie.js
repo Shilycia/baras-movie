@@ -74,55 +74,10 @@ function getdata(bass = BASEURL) {
             } else {
                 info.innerHTML = ''; 
             }
-            console.log(films)
-
-            const limit = 5; 
-            let limitPage = limit + page - 1;
-            let limitPrev = page - 2; 
-            
-            if (limitPrev < 1) {
-                limitPrev = 1;
-            }
-            let totalPage 
-            films.total_pages > 500 ? totalPage = 500 : totalpage = films.total_pages; 
-            
-            
-            if (page > 1) {
-                for (let i = limitPrev; i < page; i++) {
-                    containerpagination.insertAdjacentHTML("beforeend", 
-                        `<li class="page-item page-link" onclick="linkpage(${i})">${i}</li>`
-                    );
-                }
-            }
-            
-            for (let i = page; i <= limitPage && i <= totalPage; i++) {
-                containerpagination.insertAdjacentHTML("beforeend", 
-                    `<li class="page-item page-link ${i === page ? 'active' : ''}" onclick="linkpage(${i})">${i}</li>`
-                );
-            }
-            
-            if (totalPage > limitPage) {
-                containerpagination.insertAdjacentHTML("beforeend", 
-                    `<li class="page-item page-link">...</li>`
-                );
-                containerpagination.insertAdjacentHTML("beforeend", 
-                    `<li class="page-item page-link" onclick="linkpage(${totalPage})">${totalPage}</li>`
-                );
-            }
-            
-        
         }
     
     return loadPage();
 }
-
-function linkpage(pagecount){
-    page = pagecount
-    getdata()
-    let containerpagination = document.getElementById('conatiner-link')
-    containerpagination.innerHTML = ""
-}
-
 
 // buat manggil function pas load data 
 window.addEventListener('DOMContentLoaded', function loadalldata(){
