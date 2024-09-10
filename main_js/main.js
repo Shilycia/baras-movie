@@ -141,9 +141,9 @@ function getLastUpdate(dateString) {
     }
 }
 
-// function search buat nyari film
-function search(){
-    // manggil input yang udah di masukin
+  
+// Function to handle search and API request
+function search() {
     let search = document.getElementById('searchcontent').value
     // kalo kosong isinya bakal ngereturn yang biasa linknya
     if(search === ""){
@@ -152,12 +152,31 @@ function search(){
         getdata(baseUrl);
     }else{
         // kalo ada isinya di cari trus di kirim endpointnya ke get data trus dari get data bakal di tampilin
-        const link = `search/movie?api_key=dd0b318e97369a434228f9f3295faa40&query=${search}`
+        const link = `search/movie?api_key=dd0b318e97369a434228f9f3295faa40&query=${search}`;
         div.innerHTML=''
         getdata(link)
     }
 
 }
+  
+// fungsi debounce
+const input = document.getElementById('searchcontent')
+let timeoutid;
+
+input.addEventListener('input', e =>{
+    clearTimeout(timeoutid)
+    timeoutid = setTimeout(()=>{
+        const data = e.target.value;
+        const link = `search/movie?api_key=dd0b318e97369a434228f9f3295faa40&query=${data}`;
+        if(data === ""){
+            div.innerHTML = ''
+            const baseUrl = `discover/movie?api_key=dd0b318e97369a434228f9f3295faa40&page=${page}`;
+            getdata(baseUrl);
+        }
+        div.innerHTML=''
+        getdata(link)
+    },1000)
+})
 
 // ini buat ngambil isi genre dari server
 function genre(){

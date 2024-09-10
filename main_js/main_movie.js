@@ -159,6 +159,25 @@ function search(){
 
 }
 
+// fungsi debounce
+const input = document.getElementById('searchcontent')
+let timeoutid;
+
+input.addEventListener('input', e =>{
+    clearTimeout(timeoutid)
+    timeoutid = setTimeout(()=>{
+        const data = e.target.value;
+        const link = `search/movie?api_key=dd0b318e97369a434228f9f3295faa40&query=${data}`;
+        if(data === ""){
+            div.innerHTML = ''
+            const baseUrl = `discover/movie?api_key=dd0b318e97369a434228f9f3295faa40&page=${page}`;
+            getdata(baseUrl);
+        }
+        div.innerHTML=''
+        getdata(link)
+    },1000)
+})
+
 // ini buat ngambil isi genre dari server
 function genre(){
     fetch('https://api.themoviedb.org/3/genre/movie/list?api_key=dd0b318e97369a434228f9f3295faa40&id=28')
